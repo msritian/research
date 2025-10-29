@@ -63,11 +63,54 @@ function setupScrollSpy() {
   sections.forEach(s => obs.observe(s));
 }
 
+function renderReading(reading) {
+  const ul = document.getElementById("reading-list");
+  const statuses = Array.from(new Set((reading || []).map(r => r.status).filter(Boolean)));
+  function draw(filter) {
+    ul.innerHTML = "";
+    (reading || [])
+      .filter(r => !filter || r.status === filter)
+      .forEach(r => {
+        const a = el("a", { href: r.href, target: "_blank", rel: "noopener noreferrer" }, r.title);
+        const meta = el("div", { class: "meta" }, [
+          r.authors?.length ? r.authors.join(", ") : "",
+          r.source ? ` • ${r.source}` : "",
+          r.year ? ` • ${r.year}` : "",
+          r.status ? ` • ${r.status}` : ""
+        ].join(""));
+        const notes = r.notes ? el("div", { class: "meta" }, r.notes) : null;
+        ul.append(el("li", {}, [a, meta, notes]));
+      });
+  }
+  const filters = document.getElementById("reading-filters");
+  filters.innerHTML = "";
+  if (statuses.length) {
+    const all = el("button", { class: "filter active" }, "All");
+    all.addEventListener("click", () => {
+      filters.querySelectorAll(".filter").forEach(b => b.classList.remove("active"));
+      all.classList.add("active");
+      draw(null);
+    });
+    filters.append(all);
+    statuses.forEach(s => {
+      const b = el("button", { class: "filter" }, s);
+      b.addEventListener("click", () => {
+        filters.querySelectorAll(".filter").forEach(x => x.classList.remove("active"));
+        b.classList.add("active");
+        draw(s);
+      });
+      filters.append(b);
+    });
+  }
+  draw(null);
+}
+
 async function boot() {
   try {
-    const [profile, research] = await Promise.all([
+    const [profile, research, reading] = await Promise.all([
       loadJSON("data/profile.json"),
-      loadJSON("data/research.json")
+      loadJSON("data/research.json"),
+      loadJSON("data/reading.json").catch(() => ([]))
     ]);
 
     document.getElementById("name").textContent = profile.name || "Shivam Mittal";
@@ -78,7 +121,8 @@ async function boot() {
     if (profile.avatar) document.getElementById("avatar").src = profile.avatar;
 
     renderSocialLinks(profile.links || []);
-    renderResearch(research || []);
+  renderResearch(research || []);
+  renderReading(reading || []);
     setupScrollSpy();
   } catch (e) {
     console.error(e);
