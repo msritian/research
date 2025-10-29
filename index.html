@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Shivam Mittal — Research</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Publications, projects, and research artifacts." />
+  <meta name="color-scheme" content="light dark" />
+  <meta property="og:title" content="Shivam Mittal — Research" />
+  <meta property="og:description" content="Publications, projects, and research artifacts." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://msritian.github.io/research/" />
+  <meta property="og:image" content="assets/og-image.png" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preload" as="fetch" href="data/profile.json" crossorigin="anonymous" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="id">
+        <img id="avatar" class="avatar" src="assets/avatar-placeholder.svg" alt="Avatar" />
+        <div class="who">
+          <h1 id="name">Shivam Mittal</h1>
+          <p id="tagline" class="muted">Engineer • Researcher</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="https://msritian.github.io/">Home ←</a>
+        <a href="#publications" data-nav>Publications</a>
+      </nav>
+
+      <div class="social" id="social-links"></div>
+
+      <p id="bio" class="bio muted"></p>
+
+      <div class="footer small muted">
+        © <span id="year"></span> <span id="footer-name">Shivam Mittal</span>
+      </div>
+    </aside>
+
+    <main class="content">
+      <section id="publications" class="section">
+        <h2>Publications</h2>
+        <ul id="research-list" class="list"></ul>
+      </section>
+    </main>
+  </div>
+
+  <script src="scripts/main.js" defer></script>
+</body>
+</html>

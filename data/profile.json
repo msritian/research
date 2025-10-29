@@ -1,0 +1,12 @@
+{
+  "name": "Shivam Mittal",
+  "tagline": "Engineer • Researcher",
+  "bio": "Publications, projects, and research updates.",
+  "avatar": "assets/avatar-placeholder.svg",
+  "links": [
+    { "label": "GitHub", "href": "https://github.com/msritian" },
+    { "label": "LinkedIn", "href": "https://www.linkedin.com/in/shivam-mittal-0b916716b/" },
+    { "label": "Email", "href": "mailto:smittal39@wisc.edu" },
+    { "label": "Alt Email", "href": "mailto:mittalshivam003@gmail.com" }
+  ]
+}
