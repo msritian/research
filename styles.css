@@ -28,6 +28,7 @@ body{
   background: var(--bg); color: var(--fg); line-height: 1.6;
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 }
+a,button{transition: all .15s ease}
 a{color: inherit; text-decoration: none}
 a:hover{ text-decoration: underline; text-underline-offset: 3px }
 
@@ -90,3 +91,7 @@ h2{ font-size: 1.05rem; text-transform: none; letter-spacing: 0; margin: 0 }
 
 /* Smooth anchors */
 html{ scroll-behavior: smooth }
+
+/* Reading list polish */
+#reading-list{ list-style:none; padding:0; margin:0; display:flex; flex-direction: column; gap: 10px }
+#reading-list li{ padding: 12px; border:1px solid var(--border); border-radius: var(--radius); background: var(--card) }
