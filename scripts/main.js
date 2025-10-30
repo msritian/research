@@ -26,37 +26,28 @@ function renderSocialLinks(links) {
   });
 }
 
-function makeTagFilters(items, key, onChange) {
-  const allTags = new Set(items.flatMap(i => i.tags || []));
-  const filters = document.getElementById(key + "-filters") || document.getElementById(key + "-filters") || document.getElementById(key + "-filters");
-  const host = document.getElementById(key + "-filters") || document.getElementById("proj-filters");
+function makeStatusFilters(items, hostId, onChange) {
+  const host = document.getElementById(hostId);
   if (!host) return;
   host.innerHTML = "";
-  if (!allTags.size) return;
-  const allBtn = el("button", { class: "filter active" }, "All");
-  allBtn.addEventListener("click", () => {
-    host.querySelectorAll(".filter").forEach(b => b.classList.remove("active"));
-    allBtn.classList.add("active");
-    onChange(null);
-  });
-  host.append(allBtn);
-  allTags.forEach(tag => {
-    const b = el("button", { class: "filter" }, tag);
+  const statuses = ["All", "ONGOING", "COMPLETED"];
+  statuses.forEach((s, idx) => {
+    const b = el("button", { class: "filter" + (idx === 0 ? " active" : "") }, s);
     b.addEventListener("click", () => {
       host.querySelectorAll(".filter").forEach(x => x.classList.remove("active"));
       b.classList.add("active");
-      onChange(tag);
+      onChange(s === "All" ? null : s);
     });
     host.append(b);
   });
 }
 
 function renderProjects(items) {
-  const grid = document.getElementById("proj-grid");
-  function draw(filterTag) {
-    grid.innerHTML = "";
+  const list = document.getElementById("proj-list");
+  function draw(filterStatus) {
+    list.innerHTML = "";
     (items || [])
-      .filter(p => !filterTag || (p.tags || []).includes(filterTag))
+      .filter(p => !filterStatus || (p.status || "").toUpperCase() === filterStatus)
       .sort((a,b) => (b.sort || 0) - (a.sort || 0))
       .forEach(p => {
         const h3 = el("h3", {}, p.title || "Untitled");
@@ -64,10 +55,10 @@ function renderProjects(items) {
         const body = p.summary ? el("p", {}, p.summary) : null;
         const tags = el("div", { class: "badges" }, (p.tags || []).map(t => el("span", { class: "badge" }, t)));
         const links = el("div", { class: "badges" }, (p.links || []).map(l => el("a", { class: "badge", href: l.href, target: "_blank", rel: "noopener noreferrer" }, l.label)));
-        grid.append(el("article", { class: "card" }, [h3, meta, body, tags, links]));
+        list.append(el("li", { class: "r-item" }, [h3, meta, body, tags, links]));
       });
   }
-  makeTagFilters(items, "proj", draw);
+  makeStatusFilters(items, "proj-filters", draw);
   draw(null);
 }
 
