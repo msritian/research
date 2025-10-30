@@ -19,6 +19,7 @@ function el(tag, attrs = {}, children = []) {
 
 function renderSocialLinks(links) {
   const container = document.getElementById("social-links");
+  if (!container) return; // sidebar removed; skip if not present
   container.innerHTML = "";
   (links || []).forEach(l => {
     const a = el("a", { href: l.href, target: "_blank", rel: "noopener noreferrer" }, l.label);
@@ -106,17 +107,21 @@ function renderReadingSplit(reading) {
 async function boot() {
   try {
     const [profile, research, reading] = await Promise.all([
-      loadJSON("data/profile.json"),
+      loadJSON("data/profile.json").catch(() => ({})),
       loadJSON("data/research.json"),
       loadJSON("data/reading.json").catch(() => ([]))
     ]);
 
-    document.getElementById("name").textContent = profile.name || "Shivam Mittal";
-    document.getElementById("footer-name").textContent = profile.name || "Shivam Mittal";
-    document.getElementById("tagline").textContent = profile.tagline || "";
-    document.getElementById("bio").textContent = profile.bio || "";
-    document.getElementById("year").textContent = new Date().getFullYear();
-    if (profile.avatar) document.getElementById("avatar").src = profile.avatar;
+    // Sidebar and footer were removed; only set fields if elements exist
+    const setText = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+    const setSrc = (id, src) => { const el = document.getElementById(id); if (el && src) el.src = src; };
+
+    setText("name", profile.name || "Shivam Mittal");
+    setText("footer-name", profile.name || "Shivam Mittal");
+    setText("tagline", profile.tagline || "");
+    setText("bio", profile.bio || "");
+    setText("year", String(new Date().getFullYear()));
+    setSrc("avatar", profile.avatar);
 
     renderSocialLinks(profile.links || []);
     renderProjects(research || []);
@@ -125,8 +130,10 @@ async function boot() {
   } catch (e) {
     console.error(e);
     const content = document.querySelector(".content");
-    const warn = el("div", { class: "card" }, "Failed to load content. Please check your data/*.json files.");
-    content.prepend(warn);
+    if (content) {
+      const warn = el("div", { class: "card" }, "Failed to load content. Please check your data/*.json files.");
+      content.prepend(warn);
+    }
   }
 }
 
