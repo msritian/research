@@ -2,15 +2,15 @@
   {
     "title": "RLVR-World: Training World Models with Reinforcement Learning",
     "href": "assets/research_reinforcement_learning_world_models.pdf",
-    "authors": ["Shivam Mittal"],
-    "source": "UW–Madison",
+    "authors": ["Jialong Wu", "Shaofeng Yin", "Ningya Feng", "Mingsheng Long"],
+    "source": "arXiv",
     "year": 2025,
     "status": "Currently Reading"
   },
   {
     "title": "SparseZip: Text-Aware Visual Token Selection and Compression for Efficient Vision-Language Model Inference",
     "href": "assets/research_vision_language_models.pdf",
-    "authors": ["Shivam Mittal"],
+    "authors": ["Alexander Geppert", "Qinxinghao Chen", "Shivam Mittal", "Najib Akram", "Maheen Aboobacker"],
     "source": "UW–Madison",
     "year": 2025,
     "status": "Currently Reading"
