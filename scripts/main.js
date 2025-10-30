@@ -185,11 +185,9 @@ function renderSeminars(items){
   if (!ul) return;
   ul.innerHTML = "";
   (items || []).forEach(s => {
-    const a = el("a", { href: s.href, target: "_blank", rel: "noopener noreferrer" }, s.title || "Untitled seminar");
-    const meta = el("div", { class: "meta" }, [
-      s.authors?.length ? s.authors.join(", ") : "",
-      s.date ? ` • ${s.date}` : ""
-    ].join(""));
+    const a = el("a", { href: "#" }, s.title || "Untitled seminar");
+    a.addEventListener("click", (e) => { e.preventDefault(); if (s.href) openPdfModal(s.href); });
+    const meta = el("div", { class: "meta" }, s.date ? s.date : "");
     const sum = s.summary ? el("div", { class: "meta" }, s.summary) : null;
     ul.append(el("li", {}, [a, meta, sum].filter(Boolean)));
   });

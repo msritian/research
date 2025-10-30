@@ -2,7 +2,6 @@
   {
     "title": "LoRA-One: Efficient and Unified Low-Rank Adaptation for One-Stop Model Personalization",
     "href": "assets/LoRA-One.pdf",
-    "authors": ["Author names here"],
     "date": "Oct 2025",
     "summary": "Overview of LoRA-One: a unified low-rank adaptation framework that streamlines personalization across tasks and modalities. It demonstrates strong parameter-efficiency while maintaining performance, and simplifies deployment by reusing a single adaptable structure across use cases."
   }
