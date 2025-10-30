@@ -9,6 +9,14 @@
   },
   {
     "title": "RLVR-World: Training World Models with Reinforcement Learning",
+    "href": "assets/RLVR-World.pdf",
+    "authors": ["Jialong Wu", "Shaofeng Yin", "Ningya Feng", "Mingsheng Long"],
+    "source": "NeurIPS 2025 (arXiv)",
+    "year": 2025,
+    "status": "Currently Reading"
+  },
+  {
+    "title": "RLVR-World: Training World Models with Reinforcement Learning",
     "href": "assets/research_reinforcement_learning_world_models.pdf",
     "authors": ["Jialong Wu", "Shaofeng Yin", "Ningya Feng", "Mingsheng Long"],
     "source": "arXiv",
