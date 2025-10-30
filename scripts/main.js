@@ -43,19 +43,21 @@ function makeStatusFilters(items, hostId, onChange) {
 }
 
 function renderProjects(items) {
-  const list = document.getElementById("proj-list");
+  const grid = document.getElementById("proj-grid");
   function draw(filterStatus) {
-    list.innerHTML = "";
+    grid.innerHTML = "";
     (items || [])
       .filter(p => !filterStatus || (p.status || "").toUpperCase() === filterStatus)
       .sort((a,b) => (b.sort || 0) - (a.sort || 0))
       .forEach(p => {
+        const status = (p.status || "").toUpperCase();
+        const pill = status ? el("span", { class: "status-pill" }, status) : null;
         const h3 = el("h3", {}, p.title || "Untitled");
-        const meta = el("div", { class: "meta" }, [p.status ? p.status : "", p.when ? ` • ${p.when}` : "", p.org ? ` • ${p.org}` : ""].filter(Boolean).join(""));
+        const meta = el("div", { class: "meta" }, [p.when ? p.when : "", p.org ? ` • ${p.org}` : ""].filter(Boolean).join(""));
         const body = p.summary ? el("p", {}, p.summary) : null;
         const tags = el("div", { class: "badges" }, (p.tags || []).map(t => el("span", { class: "badge" }, t)));
         const links = el("div", { class: "badges" }, (p.links || []).map(l => el("a", { class: "badge", href: l.href, target: "_blank", rel: "noopener noreferrer" }, l.label)));
-        list.append(el("li", { class: "r-item" }, [h3, meta, body, tags, links]));
+        grid.append(el("article", { class: "card" }, [pill, h3, meta, body, tags, links]));
       });
   }
   makeStatusFilters(items, "proj-filters", draw);
