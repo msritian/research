@@ -45,6 +45,15 @@
     </main>
   </div>
 
+  <!-- Modal PDF viewer -->
+  <div id="pdf-modal" class="modal" aria-hidden="true" role="dialog" aria-label="Document viewer">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-dialog" role="document">
+      <button class="modal-close" aria-label="Close" data-close>×</button>
+      <iframe id="pdf-frame" title="PDF" src="" loading="lazy"></iframe>
+    </div>
+  </div>
+
   <script src="scripts/main.js" defer></script>
 </body>
 </html>

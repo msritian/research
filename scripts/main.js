@@ -56,9 +56,22 @@ function renderProjects(items) {
         const h3 = el("h3", {}, p.title || "Untitled");
         const meta = el("div", { class: "meta" }, [p.when ? p.when : "", p.org ? ` • ${p.org}` : ""].filter(Boolean).join(""));
         const body = p.summary ? el("p", {}, p.summary) : null;
-        const tags = el("div", { class: "badges" }, (p.tags || []).map(t => el("span", { class: "badge" }, t)));
-        const links = el("div", { class: "badges" }, (p.links || []).map(l => el("a", { class: "badge", href: l.href, target: "_blank", rel: "noopener noreferrer" }, l.label)));
-        grid.append(el("article", { class: "card" }, [pill, h3, meta, body, tags, links]));
+
+        // View details action (arrow) that opens PDF modal if provided
+        const actions = el("div", { class: "actions" });
+        if (p.pdf) {
+          const link = el("a", { href: "#", class: "view-link", "data-pdf": p.pdf }, [
+            "View details",
+            el("span", { class: "arrow", ariaHidden: "true" }, "→")
+          ]);
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            openPdfModal(p.pdf);
+          });
+          actions.append(link);
+        }
+
+        grid.append(el("article", { class: "card" }, [pill, h3, meta, body, actions]));
       });
   }
   makeStatusFilters(items, "proj-filters", draw);
@@ -136,5 +149,31 @@ async function boot() {
     }
   }
 }
+
+// Modal controls
+function openPdfModal(src){
+  const modal = document.getElementById("pdf-modal");
+  const frame = document.getElementById("pdf-frame");
+  if (!modal || !frame) return;
+  // Resolve asset path: if value starts with assets/, keep; else if absolute path exists at root, prefix ./
+  frame.src = src;
+  modal.setAttribute("aria-hidden", "false");
+}
+function closePdfModal(){
+  const modal = document.getElementById("pdf-modal");
+  const frame = document.getElementById("pdf-frame");
+  if (!modal || !frame) return;
+  modal.setAttribute("aria-hidden", "true");
+  frame.src = "";
+}
+document.addEventListener("click", (e) => {
+  const t = e.target;
+  if (t && (t.hasAttribute?.("data-close") || t.closest?.("[data-close]"))) {
+    closePdfModal();
+  }
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closePdfModal();
+});
 
 boot();
