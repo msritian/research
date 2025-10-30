@@ -2,16 +2,17 @@
   {
     "title": "SparseZip: Text-Aware Visual Token Selection and Compression for Efficient Vision-Language Model Inference",
     "status": "ONGOING",
-    "when": "Oct 2025",
+    "when": "Sept 2025",
     "org": "University of Wisconsin–Madison",
     "summary": "Text-aware visual token pruning and compression to speed up VLM inference without hurting accuracy.",
     "pdf": "assets/research_vision_language_models.pdf"
   },
   {
-    "title": "COMPLETED — Placeholder Research Project",
-    "status": "COMPLETED",
-    "when": "Jun 2024",
-    "org": "",
-    "summary": "Short one-line synopsis of the completed project. Replace with your content."
+    "title": "Training World Models with Reinforcement Learning",
+    "status": "ONGOING",
+    "when": "Oct 2025",
+    "org": "University of Wisconsin–Madison",
+    "summary": "Exploring end-to-end training of compact world models with reinforcement learning for efficient planning and control.",
+    "pdf": "assets/research_reinforcement_learning_world_models.pdf"
   }
 ]
