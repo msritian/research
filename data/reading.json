@@ -14,5 +14,13 @@
     "source": "NeurIPS 2025 (arXiv)",
     "year": 2025,
     "status": "Currently Reading"
+  },
+  {
+    "title": "Unified Reinforcement and Imitation Learning for Vision-Language Models",
+    "href": "assets/Unified Reinforcement and Imitation Learning for Vision-Language Models.pdf",
+    "authors": ["Byung-Kwan Lee", "Ryo Hachiuma", "Yong Man Ro", "Yu-Chiang Frank Wang", "Yueh-Hua Wu"],
+    "source": "NeurIPS 2025 (arXiv)",
+    "year": 2025,
+    "status": "Currently Reading"
   }
 ]
