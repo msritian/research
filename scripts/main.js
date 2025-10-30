@@ -119,11 +119,10 @@ function renderReadingSplit(reading) {
 
 async function boot() {
   try {
-    const [profile, research, reading, seminars] = await Promise.all([
+    const [profile, research, reading] = await Promise.all([
       loadJSON("data/profile.json").catch(() => ({})),
       loadJSON("data/research.json"),
-      loadJSON("data/reading.json").catch(() => ([])),
-      loadJSON("data/seminars.json").catch(() => ([]))
+      loadJSON("data/reading.json").catch(() => ([]))
     ]);
 
     // Sidebar and footer were removed; only set fields if elements exist
@@ -140,7 +139,6 @@ async function boot() {
   renderSocialLinks(profile.links || []);
   renderProjects(research || []);
   renderReadingSplit(reading || []);
-  renderSeminars(seminars || []);
     setupScrollSpy();
   } catch (e) {
     console.error(e);
@@ -179,16 +177,3 @@ document.addEventListener("keydown", (e) => {
 });
 
 boot();
-
-function renderSeminars(items){
-  const ul = document.getElementById("seminars-list");
-  if (!ul) return;
-  ul.innerHTML = "";
-  (items || []).forEach(s => {
-    const a = el("a", { href: "#" }, s.title || "Untitled seminar");
-    a.addEventListener("click", (e) => { e.preventDefault(); if (s.href) openPdfModal(s.href); });
-    const meta = el("div", { class: "meta" }, s.date ? s.date : "");
-    const sum = s.summary ? el("div", { class: "meta" }, s.summary) : null;
-    ul.append(el("li", {}, [a, meta, sum].filter(Boolean)));
-  });
-}

@@ -1,8 +1,0 @@
-[
-  {
-    "title": "LoRA-One: Efficient and Unified Low-Rank Adaptation for One-Stop Model Personalization",
-    "href": "assets/LoRA-One.pdf",
-    "date": "Oct 2025",
-    "summary": "LoRA-One is a theoretically grounded improvement to the common fine-tuning technique (LoRA), proving that the ideal starting direction for adaptation can be calculated efficiently from just a single, initial gradient step. This \"spectral initialization\" provides a \"perfect blueprint\" allowing models to converge faster, more stably, and achieve significant performance improvements over traditional methods across various benchmarks."
-  }
-]
