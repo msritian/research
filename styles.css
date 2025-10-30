@@ -79,6 +79,8 @@ h1{font-size: 1.4rem; line-height: 1.2; margin: 0}
 .section{ margin-bottom: 40px }
 .section-head{ display:flex; align-items:center; justify-content: space-between; gap: 12px; margin-bottom: 10px }
 h2{ font-size: 1.05rem; text-transform: none; letter-spacing: 0; margin: 0 }
+.subsection{ margin-top: 14px }
+.subsection h3{ font-size: 1rem; margin: 0 0 8px; color: var(--fg) }
 
 .list{ display:flex; flex-direction: column; gap: 10px; padding:0; margin:0; list-style:none }
 .list li{ padding: 12px; border:1px solid var(--border); border-radius: var(--radius); background: var(--card) }
@@ -93,5 +95,14 @@ h2{ font-size: 1.05rem; text-transform: none; letter-spacing: 0; margin: 0 }
 html{ scroll-behavior: smooth }
 
 /* Reading list polish */
-#reading-list{ list-style:none; padding:0; margin:0; display:flex; flex-direction: column; gap: 10px }
-#reading-list li{ padding: 12px; border:1px solid var(--border); border-radius: var(--radius); background: var(--card) }
+#reading-current, #reading-read{ list-style:none; padding:0; margin:0; display:flex; flex-direction: column; gap: 10px }
+#reading-current li, #reading-read li{ padding: 12px; border:1px solid var(--border); border-radius: var(--radius); background: var(--card) }
+
+/* Research grid */
+.grid{ display:grid; grid-template-columns: 1fr; gap: 10px }
+@media(min-width: 700px){ .grid{ grid-template-columns: 1fr 1fr } }
+.card{ border:1px solid var(--border); border-radius: var(--radius); background: var(--card); padding: 12px }
+.card h3{ margin: 0 0 6px; font-size: 1rem }
+.filters{ display:flex; gap: 6px; flex-wrap: wrap }
+.filters .filter{ padding: 6px 10px; border:1px solid var(--border); border-radius: 999px; background: color-mix(in oklab, var(--bg) 94%, transparent) }
+.filters .filter.active{ background: var(--accent-weak) }

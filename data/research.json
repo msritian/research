@@ -1,2 +1,20 @@
 [
+	{
+		"title": "ONGOING — Placeholder Research Project",
+		"status": "ONGOING",
+		"when": "Oct 2025",
+		"org": "",
+		"summary": "Short one-line synopsis of the research project. Replace with your content.",
+		"tags": ["NLP", "Systems"],
+		"links": []
+	},
+	{
+		"title": "COMPLETED — Placeholder Research Project",
+		"status": "COMPLETED",
+		"when": "Jun 2024",
+		"org": "",
+		"summary": "Short one-line synopsis of the completed project. Replace with your content.",
+		"tags": ["CV", "ML"],
+		"links": []
+	}
 ]

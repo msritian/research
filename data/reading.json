@@ -1,2 +1,18 @@
 [
+	{
+		"title": "Example Paper A",
+		"href": "#",
+		"authors": ["Author 1", "Author 2"],
+		"source": "arXiv",
+		"year": 2025,
+		"status": "Currently Reading"
+	},
+	{
+		"title": "Example Paper B",
+		"href": "#",
+		"authors": ["Author 3"],
+		"source": "Blog",
+		"year": 2024,
+		"status": "Read"
+	}
 ]

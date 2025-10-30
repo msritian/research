@@ -26,19 +26,49 @@ function renderSocialLinks(links) {
   });
 }
 
-function renderResearch(research) {
-  const ul = document.getElementById("research-list");
-  ul.innerHTML = "";
-  (research || [])
-    .sort((a,b) => (b.year || 0) - (a.year || 0))
-    .forEach(r => {
-      const title = el("strong", {}, r.title);
-      const authors = r.authors?.length ? el("div", { class: "meta" }, r.authors.join(", ")) : null;
-      const venue = el("div", { class: "meta" }, [r.venue || "", r.year ? ` • ${r.year}` : ""].join(""));
-      const links = el("div", { class: "badges" }, (r.links || []).map(l => el("a", { class: "badge", href: l.href, target: "_blank", rel: "noopener noreferrer" }, l.label)));
-      const summary = r.summary ? el("div", { class: "meta" }, r.summary) : null;
-      ul.append(el("li", {}, [title, authors, venue, links, summary]));
+function makeTagFilters(items, key, onChange) {
+  const allTags = new Set(items.flatMap(i => i.tags || []));
+  const filters = document.getElementById(key + "-filters") || document.getElementById(key + "-filters") || document.getElementById(key + "-filters");
+  const host = document.getElementById(key + "-filters") || document.getElementById("proj-filters");
+  if (!host) return;
+  host.innerHTML = "";
+  if (!allTags.size) return;
+  const allBtn = el("button", { class: "filter active" }, "All");
+  allBtn.addEventListener("click", () => {
+    host.querySelectorAll(".filter").forEach(b => b.classList.remove("active"));
+    allBtn.classList.add("active");
+    onChange(null);
+  });
+  host.append(allBtn);
+  allTags.forEach(tag => {
+    const b = el("button", { class: "filter" }, tag);
+    b.addEventListener("click", () => {
+      host.querySelectorAll(".filter").forEach(x => x.classList.remove("active"));
+      b.classList.add("active");
+      onChange(tag);
     });
+    host.append(b);
+  });
+}
+
+function renderProjects(items) {
+  const grid = document.getElementById("proj-grid");
+  function draw(filterTag) {
+    grid.innerHTML = "";
+    (items || [])
+      .filter(p => !filterTag || (p.tags || []).includes(filterTag))
+      .sort((a,b) => (b.sort || 0) - (a.sort || 0))
+      .forEach(p => {
+        const h3 = el("h3", {}, p.title || "Untitled");
+        const meta = el("div", { class: "meta" }, [p.status ? p.status : "", p.when ? ` • ${p.when}` : "", p.org ? ` • ${p.org}` : ""].filter(Boolean).join(""));
+        const body = p.summary ? el("p", {}, p.summary) : null;
+        const tags = el("div", { class: "badges" }, (p.tags || []).map(t => el("span", { class: "badge" }, t)));
+        const links = el("div", { class: "badges" }, (p.links || []).map(l => el("a", { class: "badge", href: l.href, target: "_blank", rel: "noopener noreferrer" }, l.label)));
+        grid.append(el("article", { class: "card" }, [h3, meta, body, tags, links]));
+      });
+  }
+  makeTagFilters(items, "proj", draw);
+  draw(null);
 }
 
 function setupScrollSpy() {
@@ -63,46 +93,21 @@ function setupScrollSpy() {
   sections.forEach(s => obs.observe(s));
 }
 
-function renderReading(reading) {
-  const ul = document.getElementById("reading-list");
-  const statuses = Array.from(new Set((reading || []).map(r => r.status).filter(Boolean)));
-  function draw(filter) {
-    ul.innerHTML = "";
-    (reading || [])
-      .filter(r => !filter || r.status === filter)
-      .forEach(r => {
-        const a = el("a", { href: r.href, target: "_blank", rel: "noopener noreferrer" }, r.title);
-        const meta = el("div", { class: "meta" }, [
-          r.authors?.length ? r.authors.join(", ") : "",
-          r.source ? ` • ${r.source}` : "",
-          r.year ? ` • ${r.year}` : "",
-          r.status ? ` • ${r.status}` : ""
-        ].join(""));
-        const notes = r.notes ? el("div", { class: "meta" }, r.notes) : null;
-        ul.append(el("li", {}, [a, meta, notes]));
-      });
-  }
-  const filters = document.getElementById("reading-filters");
-  filters.innerHTML = "";
-  if (statuses.length) {
-    const all = el("button", { class: "filter active" }, "All");
-    all.addEventListener("click", () => {
-      filters.querySelectorAll(".filter").forEach(b => b.classList.remove("active"));
-      all.classList.add("active");
-      draw(null);
-    });
-    filters.append(all);
-    statuses.forEach(s => {
-      const b = el("button", { class: "filter" }, s);
-      b.addEventListener("click", () => {
-        filters.querySelectorAll(".filter").forEach(x => x.classList.remove("active"));
-        b.classList.add("active");
-        draw(s);
-      });
-      filters.append(b);
-    });
-  }
-  draw(null);
+function renderReadingSplit(reading) {
+  const cur = document.getElementById("reading-current");
+  const read = document.getElementById("reading-read");
+  cur.innerHTML = ""; read.innerHTML = "";
+  (reading || []).forEach(r => {
+    const a = el("a", { href: r.href, target: "_blank", rel: "noopener noreferrer" }, r.title);
+    const meta = el("div", { class: "meta" }, [
+      r.authors?.length ? r.authors.join(", ") : "",
+      r.source ? ` • ${r.source}` : "",
+      r.year ? ` • ${r.year}` : ""
+    ].join(""));
+    const li = el("li", {}, [a, meta]);
+    if ((r.status || "").toLowerCase() === "currently reading") cur.append(li);
+    else read.append(li);
+  });
 }
 
 async function boot() {
@@ -121,8 +126,8 @@ async function boot() {
     if (profile.avatar) document.getElementById("avatar").src = profile.avatar;
 
     renderSocialLinks(profile.links || []);
-  renderResearch(research || []);
-  renderReading(reading || []);
+    renderProjects(research || []);
+    renderReadingSplit(reading || []);
     setupScrollSpy();
   } catch (e) {
     console.error(e);

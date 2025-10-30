@@ -28,8 +28,8 @@
 
       <nav class="nav">
         <a href="https://msritian.github.io/">Home ←</a>
-        <a href="#publications" data-nav>Publications</a>
-        <a href="#reading" data-nav>Reading</a>
+        <a href="#projects" data-nav>Research</a>
+        <a href="#external" data-nav>External Papers & Notes</a>
       </nav>
 
       <div class="social" id="social-links"></div>
@@ -42,17 +42,24 @@
     </aside>
 
     <main class="content">
-      <section id="publications" class="section">
-        <h2>Publications</h2>
-        <ul id="research-list" class="list"></ul>
+      <section id="projects" class="section">
+        <div class="section-head">
+          <h2>Research</h2>
+          <div id="proj-filters" class="filters"></div>
+        </div>
+        <div id="proj-grid" class="grid"></div>
       </section>
 
-      <section id="reading" class="section">
-        <div class="section-head">
-          <h2>Reading List</h2>
-          <div id="reading-filters" class="filters"></div>
+      <section id="external" class="section">
+        <h2>External research papers & notes</h2>
+        <div class="subsection">
+          <h3>Currently Reading</h3>
+          <ul id="reading-current" class="list"></ul>
         </div>
-        <ul id="reading-list" class="list"></ul>
+        <div class="subsection">
+          <h3>Read</h3>
+          <ul id="reading-read" class="list"></ul>
+        </div>
       </section>
     </main>
   </div>
