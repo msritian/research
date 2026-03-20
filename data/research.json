@@ -5,7 +5,6 @@
     "when": "Sept 2025",
     "org": "University of Wisconsin–Madison",
     "summary": "Text-aware visual token pruning and compression to speed up VLM inference without hurting accuracy.",
-    "pdf": "assets/research_vision_language_models.pdf",
     "links": [
       { "label": "GitHub", "href": "https://github.com/msritian/VisionZip-exp" },
       { "label": "Report", "href": "https://drive.google.com/file/d/1vT8eoPMsxyjswNRG53QoFUprbrldSyJ8/view" },
