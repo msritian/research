@@ -66,12 +66,12 @@ function renderProjects(items) {
         const tags = el("div", { class: "badges" }, (p.tags || []).map(t => el("span", { class: "badge" }, t)));
         const actions = el("div", { class: "actions" });
         if (p.pdf) {
-          const viewBtn = el("a", { href: "#", class: "view-link" }, ["View Report", el("span", { class: "arrow" }, "→")]);
+          const viewBtn = el("a", { href: "#", class: "view-link" }, "Report");
           viewBtn.addEventListener("click", e => { e.preventDefault(); openPdfModal(p.pdf); });
           actions.append(viewBtn);
         }
         (p.links || []).forEach(l => {
-          actions.append(el("a", { href: l.href, target: "_blank", rel: "noopener noreferrer", class: "view-link" }, [l.label, el("span", { class: "arrow" }, "↗")]));
+          actions.append(el("a", { href: l.href, target: "_blank", rel: "noopener noreferrer", class: "view-link" }, l.label));
         });
         grid.append(el("article", { class: "card" }, [h3, meta, body, tags, actions]));
       });
