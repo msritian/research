@@ -37,10 +37,11 @@
   },
   {
     "title": "Diffusion Language Models: Practical Differences vs. Auto-Regressive Foundation Models",
-    "status": "ONGOING",
+    "status": "COMPLETED",
     "when": "Feb 2026",
     "org": "University of Wisconsin–Madison",
     "summary": "Investigating practical differences between diffusion-based and auto-regressive foundation models, and improving generative capabilities of diffusion LLMs.",
+    "pdf": "assets/Foundation_Models_Project.pdf",
     "links": [
       { "label": "GitHub", "href": "https://github.com/msritian/Diffusion-Language-Models" }
     ],
