@@ -70,6 +70,12 @@ function renderProjects(items) {
           });
           actions.append(link);
         }
+        (p.links || []).forEach(l => {
+          actions.append(el("a", { href: l.href, target: "_blank", rel: "noopener noreferrer", class: "view-link" }, [
+            l.label,
+            el("span", { class: "arrow", ariaHidden: "true" }, "↗")
+          ]));
+        });
 
         grid.append(el("article", { class: "card" }, [pill, h3, meta, body, actions]));
       });
