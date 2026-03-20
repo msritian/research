@@ -19,7 +19,6 @@ function el(tag, attrs = {}, children = []) {
 
 function renderSocialLinks(links) {
   const container = document.getElementById("social-links");
-  if (!container) return; // sidebar removed; skip if not present
   container.innerHTML = "";
   (links || []).forEach(l => {
     const a = el("a", { href: l.href, target: "_blank", rel: "noopener noreferrer" }, l.label);
@@ -27,17 +26,26 @@ function renderSocialLinks(links) {
   });
 }
 
-function makeStatusFilters(items, hostId, onChange) {
-  const host = document.getElementById(hostId);
+function makeTagFilters(items, key, onChange) {
+  const allTags = new Set(items.flatMap(i => i.tags || []));
+  const filters = document.getElementById(key + "-filters") || document.getElementById(key + "-filters") || document.getElementById(key + "-filters");
+  const host = document.getElementById(key + "-filters") || document.getElementById("proj-filters");
   if (!host) return;
   host.innerHTML = "";
-  const statuses = ["All", "ONGOING", "COMPLETED"];
-  statuses.forEach((s, idx) => {
-    const b = el("button", { class: "filter" + (idx === 0 ? " active" : "") }, s);
+  if (!allTags.size) return;
+  const allBtn = el("button", { class: "filter active" }, "All");
+  allBtn.addEventListener("click", () => {
+    host.querySelectorAll(".filter").forEach(b => b.classList.remove("active"));
+    allBtn.classList.add("active");
+    onChange(null);
+  });
+  host.append(allBtn);
+  allTags.forEach(tag => {
+    const b = el("button", { class: "filter" }, tag);
     b.addEventListener("click", () => {
       host.querySelectorAll(".filter").forEach(x => x.classList.remove("active"));
       b.classList.add("active");
-      onChange(s === "All" ? null : s);
+      onChange(tag);
     });
     host.append(b);
   });
@@ -45,42 +53,21 @@ function makeStatusFilters(items, hostId, onChange) {
 
 function renderProjects(items) {
   const grid = document.getElementById("proj-grid");
-  function draw(filterStatus) {
+  function draw(filterTag) {
     grid.innerHTML = "";
     (items || [])
-      .filter(p => !filterStatus || (p.status || "").toUpperCase() === filterStatus)
+      .filter(p => !filterTag || (p.tags || []).includes(filterTag))
       .sort((a,b) => (b.sort || 0) - (a.sort || 0))
       .forEach(p => {
-        const status = (p.status || "").toUpperCase();
-        const pill = status ? el("span", { class: "status-pill" }, status) : null;
         const h3 = el("h3", {}, p.title || "Untitled");
-        const meta = el("div", { class: "meta" }, [p.when ? p.when : "", p.org ? ` • ${p.org}` : ""].filter(Boolean).join(""));
+        const meta = el("div", { class: "meta" }, [p.status ? p.status : "", p.when ? ` • ${p.when}` : "", p.org ? ` • ${p.org}` : ""].filter(Boolean).join(""));
         const body = p.summary ? el("p", {}, p.summary) : null;
-
-        // View details action (arrow) that opens PDF modal if provided
-        const actions = el("div", { class: "actions" });
-        if (p.pdf) {
-          const link = el("a", { href: "#", class: "view-link", "data-pdf": p.pdf }, [
-            "View details",
-            el("span", { class: "arrow", ariaHidden: "true" }, "→")
-          ]);
-          link.addEventListener("click", (e) => {
-            e.preventDefault();
-            openPdfModal(p.pdf);
-          });
-          actions.append(link);
-        }
-        (p.links || []).forEach(l => {
-          actions.append(el("a", { href: l.href, target: "_blank", rel: "noopener noreferrer", class: "view-link" }, [
-            l.label,
-            el("span", { class: "arrow", ariaHidden: "true" }, "↗")
-          ]));
-        });
-
-        grid.append(el("article", { class: "card" }, [pill, h3, meta, body, actions]));
+        const tags = el("div", { class: "badges" }, (p.tags || []).map(t => el("span", { class: "badge" }, t)));
+        const links = el("div", { class: "badges" }, (p.links || []).map(l => el("a", { class: "badge", href: l.href, target: "_blank", rel: "noopener noreferrer" }, l.label)));
+        grid.append(el("article", { class: "card" }, [h3, meta, body, tags, links]));
       });
   }
-  makeStatusFilters(items, "proj-filters", draw);
+  makeTagFilters(items, "proj", draw);
   draw(null);
 }
 
@@ -126,60 +113,28 @@ function renderReadingSplit(reading) {
 async function boot() {
   try {
     const [profile, research, reading] = await Promise.all([
-      loadJSON("data/profile.json").catch(() => ({})),
+      loadJSON("data/profile.json"),
       loadJSON("data/research.json"),
       loadJSON("data/reading.json").catch(() => ([]))
     ]);
 
-    // Sidebar and footer were removed; only set fields if elements exist
-    const setText = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
-    const setSrc = (id, src) => { const el = document.getElementById(id); if (el && src) el.src = src; };
+    document.getElementById("name").textContent = profile.name || "Shivam Mittal";
+    document.getElementById("footer-name").textContent = profile.name || "Shivam Mittal";
+    document.getElementById("tagline").textContent = profile.tagline || "";
+    document.getElementById("bio").textContent = profile.bio || "";
+    document.getElementById("year").textContent = new Date().getFullYear();
+    if (profile.avatar) document.getElementById("avatar").src = profile.avatar;
 
-    setText("name", profile.name || "Shivam Mittal");
-    setText("footer-name", profile.name || "Shivam Mittal");
-    setText("tagline", profile.tagline || "");
-    setText("bio", profile.bio || "");
-    setText("year", String(new Date().getFullYear()));
-    setSrc("avatar", profile.avatar);
-
-  renderSocialLinks(profile.links || []);
-  renderProjects(research || []);
-  renderReadingSplit(reading || []);
+    renderSocialLinks(profile.links || []);
+    renderProjects(research || []);
+    renderReadingSplit(reading || []);
     setupScrollSpy();
   } catch (e) {
     console.error(e);
     const content = document.querySelector(".content");
-    if (content) {
-      const warn = el("div", { class: "card" }, "Failed to load content. Please check your data/*.json files.");
-      content.prepend(warn);
-    }
+    const warn = el("div", { class: "card" }, "Failed to load content. Please check your data/*.json files.");
+    content.prepend(warn);
   }
 }
-
-// Modal controls
-function openPdfModal(src){
-  const modal = document.getElementById("pdf-modal");
-  const frame = document.getElementById("pdf-frame");
-  if (!modal || !frame) return;
-  // Resolve asset path: if value starts with assets/, keep; else if absolute path exists at root, prefix ./
-  frame.src = src;
-  modal.setAttribute("aria-hidden", "false");
-}
-function closePdfModal(){
-  const modal = document.getElementById("pdf-modal");
-  const frame = document.getElementById("pdf-frame");
-  if (!modal || !frame) return;
-  modal.setAttribute("aria-hidden", "true");
-  frame.src = "";
-}
-document.addEventListener("click", (e) => {
-  const t = e.target;
-  if (t && (t.hasAttribute?.("data-close") || t.closest?.("[data-close]"))) {
-    closePdfModal();
-  }
-});
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closePdfModal();
-});
 
 boot();
