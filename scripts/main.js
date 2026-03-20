@@ -19,6 +19,7 @@ function el(tag, attrs = {}, children = []) {
 
 function renderSocialLinks(links) {
   const container = document.getElementById("social-links");
+  if (!container) return;
   container.innerHTML = "";
   (links || []).forEach(l => {
     const a = el("a", { href: l.href, target: "_blank", rel: "noopener noreferrer" }, l.label);
@@ -96,6 +97,7 @@ function setupScrollSpy() {
 function renderReadingSplit(reading) {
   const cur = document.getElementById("reading-current");
   const read = document.getElementById("reading-read");
+  if (!cur || !read) return;
   cur.innerHTML = ""; read.innerHTML = "";
   (reading || []).forEach(r => {
     const a = el("a", { href: r.href, target: "_blank", rel: "noopener noreferrer" }, r.title);
@@ -118,12 +120,14 @@ async function boot() {
       loadJSON("data/reading.json").catch(() => ([]))
     ]);
 
-    document.getElementById("name").textContent = profile.name || "Shivam Mittal";
-    document.getElementById("footer-name").textContent = profile.name || "Shivam Mittal";
-    document.getElementById("tagline").textContent = profile.tagline || "";
-    document.getElementById("bio").textContent = profile.bio || "";
-    document.getElementById("year").textContent = new Date().getFullYear();
-    if (profile.avatar) document.getElementById("avatar").src = profile.avatar;
+    const setText = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
+    setText("name", profile.name || "Shivam Mittal");
+    setText("footer-name", profile.name || "Shivam Mittal");
+    setText("tagline", profile.tagline || "");
+    setText("bio", profile.bio || "");
+    setText("year", String(new Date().getFullYear()));
+    const avatar = document.getElementById("avatar");
+    if (avatar && profile.avatar) avatar.src = profile.avatar;
 
     renderSocialLinks(profile.links || []);
     renderProjects(research || []);
