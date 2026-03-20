@@ -45,5 +45,14 @@
       { "label": "GitHub", "href": "https://github.com/msritian/Diffusion-Language-Models" }
     ],
     "sort": 70
+  },
+  {
+    "title": "RLVR-World: Training World Models with Reinforcement Learning",
+    "status": "ONGOING",
+    "when": "Oct 2025",
+    "org": "University of Wisconsin–Madison",
+    "summary": "Exploring end-to-end training of compact world models with reinforcement learning for efficient planning and control.",
+    "pdf": "assets/research_reinforcement_learning_world_models.pdf",
+    "sort": 60
   }
 ]
