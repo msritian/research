@@ -64,13 +64,44 @@ function renderProjects(items) {
         const meta = el("div", { class: "meta" }, [p.status ? p.status : "", p.when ? ` • ${p.when}` : "", p.org ? ` • ${p.org}` : ""].filter(Boolean).join(""));
         const body = p.summary ? el("p", {}, p.summary) : null;
         const tags = el("div", { class: "badges" }, (p.tags || []).map(t => el("span", { class: "badge" }, t)));
-        const links = el("div", { class: "badges" }, (p.links || []).map(l => el("a", { class: "badge", href: l.href, target: "_blank", rel: "noopener noreferrer" }, l.label)));
-        grid.append(el("article", { class: "card" }, [h3, meta, body, tags, links]));
+        const actions = el("div", { class: "actions" });
+        if (p.pdf) {
+          const viewBtn = el("a", { href: "#", class: "view-link" }, ["View Report", el("span", { class: "arrow" }, "→")]);
+          viewBtn.addEventListener("click", e => { e.preventDefault(); openPdfModal(p.pdf); });
+          actions.append(viewBtn);
+        }
+        (p.links || []).forEach(l => {
+          actions.append(el("a", { href: l.href, target: "_blank", rel: "noopener noreferrer", class: "view-link" }, [l.label, el("span", { class: "arrow" }, "↗")]));
+        });
+        grid.append(el("article", { class: "card" }, [h3, meta, body, tags, actions]));
       });
   }
   makeTagFilters(items, "proj", draw);
   draw(null);
 }
+
+function openPdfModal(src) {
+  const modal = document.getElementById("pdf-modal");
+  const frame = document.getElementById("pdf-frame");
+  if (!modal || !frame) return;
+  frame.src = src;
+  modal.setAttribute("aria-hidden", "false");
+}
+
+function closePdfModal() {
+  const modal = document.getElementById("pdf-modal");
+  const frame = document.getElementById("pdf-frame");
+  if (!modal || !frame) return;
+  modal.setAttribute("aria-hidden", "true");
+  frame.src = "";
+}
+
+document.addEventListener("click", e => {
+  if (e.target && (e.target.hasAttribute?.("data-close") || e.target.closest?.("[data-close]"))) {
+    closePdfModal();
+  }
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape") closePdfModal(); });
 
 function setupScrollSpy() {
   const links = Array.from(document.querySelectorAll('[data-nav]'));
