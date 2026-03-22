@@ -13,11 +13,11 @@
     "sort": 100
   },
   {
-    "title": "PolyMarket Forecasting",
+    "title": "PolyMarket Prediction",
     "status": "ONGOING",
     "when": "Jan 2026",
     "org": "University of Wisconsin–Madison",
-    "summary": "PolyMarket Forecasting, focused on benchmarking, LLM post training, Reinforcement Learning Fine Tuning, LLM based search and Agentic AI",
+    "summary": "PolyMarket Prediction, focused on benchmarking, custom verifiers, Reinforcement Learning Fine Tuning, LLM based search and Agentic AI",
     "links": [
       { "label": "GitHub", "href": "https://github.com/msritian/Research-Lookahead-AI" }
     ],
